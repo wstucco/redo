@@ -9,11 +9,11 @@ import (
 
 func main() {
 	// exec the redo step for each argument
-	StringSlice(os.Args[1:]).Map(redo)
+	StringSlice(os.Args[1:]).Each(redo)
 }
 
 // run redo tasks
-func redo(target string) string {
+func redo(target string) {
 	// build must be atomic, first we build to a temp file,
 	// in case of success we replace the target
 
@@ -26,8 +26,6 @@ func redo(target string) string {
 		// if flags.Verbose -- now it gets never executed
 		log.Printf("%s", out)
 	}
-
-	return ""
 }
 
 func replaceBaseName(filePath string, replace string) string {
