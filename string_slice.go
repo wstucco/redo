@@ -19,3 +19,9 @@ func (slice StringSlice) Map(fn func(string) string) StringSlice {
 
 	return newSlice
 }
+
+func (slice StringSlice) Each(fn func(string)) {
+	for _, s := range slice {
+		fn(s)
+	}
+}
