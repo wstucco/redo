@@ -23,6 +23,23 @@ func TestReplaceBaseName(t *testing.T) {
 	})
 }
 
+func TestBaseName(t *testing.T) {
+	Convey("Testing baseName", t, func() {
+
+		Convey(`"redo.do" should return "redo"`, func() {
+			So(baseName("redo.do"), ShouldEqual, "redo")
+		})
+
+		Convey(`"./redo.do" should return "redo"`, func() {
+			So(baseName("./redo.do"), ShouldEqual, "redo")
+		})
+
+		Convey(`"/usr/local/share/redo.do" should be "redo"`, func() {
+			So(baseName("/usr/local/share/redo.do"), ShouldEqual, "redo")
+		})
+	})
+}
+
 func TestHasExtension(t *testing.T) {
 	Convey("Testing hasEsxtension", t, func() {
 

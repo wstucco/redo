@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 	"os/exec"
-	"path"
+	"path/filepath"
 )
 
 const (
@@ -12,11 +12,16 @@ const (
 )
 
 func replaceBaseName(filePath string, replace string) string {
-	return path.Join(path.Dir(filePath), replace+path.Ext(filePath))
+	return filepath.Join(filepath.Dir(filePath), replace+filepath.Ext(filePath))
+}
+
+func baseName(filePath string) string {
+	fileName := filepath.Base(filePath)
+	return fileName[:len(fileName)-len(filepath.Ext(fileName))]
 }
 
 func hasExtension(filePath string) bool {
-	return len(path.Ext(filePath)) > 0
+	return len(filepath.Ext(filePath)) > 0
 }
 
 func fileExists(filePath string) bool {
@@ -25,6 +30,7 @@ func fileExists(filePath string) bool {
 		return false
 	}
 
+	// if exists and is not a regulare file (i.e. a Dir) returns false
 	return fi.Mode().IsRegular()
 }
 
@@ -64,7 +70,7 @@ func redo(target string) {
 
 	log.Print(path)
 	tmp := target + "---redoing"
-	if out, err := exec.Command("sh", path, "-", "-", tmp).CombinedOutput(); err == nil {
+	if out, err := exec.Command("sh", path, "0", baseName(target), tmp).CombinedOutput(); err == nil {
 		os.Rename(tmp, target)
 	} else {
 		log.Fatalf("Redo script returned an error: %s", err)
