@@ -46,7 +46,7 @@ func Map(f fs, slice []string) []string {
 	return out
 }
 
-// Returns the first element of the Slice, if slice is empty, panic
+// Returns the a new slice with the first element removed, if slice is empty, panic
 func Tail(slice []string) []string {
 	return slice[1:]
 }

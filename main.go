@@ -54,7 +54,7 @@ func redoPath(target string) string {
 	if hasExtension(target) {
 		targets = append(targets, replaceBaseName(target, "default")+".do")
 	}
-	// we don't use first because First can panic
+	// we don't use first here, because First can panic
 	return safeFirst(fileExists, targets)
 }
 
@@ -74,7 +74,7 @@ func redo(target string) {
 		os.Rename(tmp, target)
 	} else {
 		log.Fatalf("Redo script returned an error: %s", err)
-		// if flags.Verbose -- now it gets never executed
+		// TODO: if flags.Verbose -- now it gets never executed
 		log.Printf("%s", out)
 	}
 }
