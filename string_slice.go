@@ -1,27 +1,52 @@
 package main
 
+type fn func(string)
+type fs func(string) string
+type fb func(string) bool
+
 type StringSlice []string
 
-func (slice StringSlice) Head() string {
-	if len(slice) > 0 {
-		return slice[0]
+// Invokes passed func on every element. Comparable to underscore’s each.
+func Each(f fn, slice []string) {
+	for _, s := range slice {
+		f(s)
 	}
-
-	return ""
 }
 
-func (slice StringSlice) Map(fn func(string) string) StringSlice {
-	var newSlice StringSlice
+func Filter(f fb, slice []string) []string {
+	out := make([]string, 0)
 
-	for _, s := range slice {
-		newSlice = append(newSlice, fn(s))
+	for _, v := range slice {
+		if f(v) {
+			out = append(out, v)
+		}
 	}
 
-	return newSlice
+	return out
 }
 
-func (slice StringSlice) Each(fn func(string)) {
-	for _, s := range slice {
-		fn(s)
+// Returns first element which returns true for passed func. Comparable to Linq’s First or underscore’s find.
+// Returns error if no elements satisfy the func.
+func First(f fb, slice []string) string {
+	return Head(Filter(f, slice))
+}
+
+// Returns the first element of the Slice, if slice is empty, panic
+func Head(slice []string) string {
+	return slice[0]
+}
+
+// Create a new slice, of same length of original slice, by mapping each value through
+// the function func. Comparable to underscore’s map.
+func Map(f fs, slice []string) []string {
+	out := make([]string, len(slice))
+	for i, s := range slice {
+		out[i] = f(s)
 	}
+	return out
+}
+
+// Returns the first element of the Slice, if slice is empty, panic
+func Tail(slice []string) []string {
+	return slice[1:]
 }
